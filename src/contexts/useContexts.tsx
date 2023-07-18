@@ -1,9 +1,10 @@
 import api from '@/services/api'
-import { User, UserLogin } from '@/@types/types'
+import { RegisterUserTypes, User, UserLogin } from '@/@types/types'
 import { message } from 'antd'
 import { NoticeType } from 'antd/es/message/interface'
 import { AxiosResponse } from 'axios'
 import { ReactNode, createContext, useContext, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface MyContextProviderProps {
   children: ReactNode
@@ -19,6 +20,9 @@ type ContextsType = {
   isAuthenticated: boolean
   contextHolder: ReactNode
   alertMessage: (data: AlertTypes) => void
+  handleRegisterSubmit: (
+    data: RegisterUserTypes,
+  ) => Promise<AxiosResponse | unknown>
 }
 
 export const Contexts = createContext({} as ContextsType)
@@ -28,6 +32,7 @@ export function ContextsProvider({ children }: MyContextProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const [messageApi, contextHolder] = message.useMessage()
+  const { push } = useRouter()
 
   const alertMessage = ({ type, message }: AlertTypes) => {
     messageApi.open({
@@ -44,12 +49,42 @@ export function ContextsProvider({ children }: MyContextProviderProps) {
       setIsAuthenticated(true)
       setUser(response.data.user)
       alertMessage({ type: 'success', message: 'Autenticado com sucesso' })
+      setTimeout(() => {
+        push('/dashboard')
+      }, 2000)
       return response
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       err.response.data?.erros.map((i: { msg: string }) => {
         return alertMessage({ type: 'error', message: i.msg })
       })
+      return err.response
+    }
+  }
+  const handleRegisterSubmit = async (
+    data: RegisterUserTypes,
+  ): Promise<AxiosResponse> => {
+    try {
+      console.log('aq')
+      const { name, email, birthday, phone, password, cpf } = data
+      const response = await api.post('/users', {
+        name,
+        email,
+        birthday: birthday?.toISOString(),
+        phone,
+        password,
+        cpf,
+      })
+      alertMessage({ type: 'success', message: 'Cadastrado com sucesso' })
+      setTimeout(() => {
+        push('/login')
+      }, 2000)
+      return response
+    } catch (err: any) {
+      err.response.data.erros.map((i: { msg: string }) => {
+        return alertMessage({ type: 'error', message: i.msg })
+      })
+
       return err.response
     }
   }
@@ -61,6 +96,7 @@ export function ContextsProvider({ children }: MyContextProviderProps) {
         isAuthenticated,
         contextHolder,
         alertMessage,
+        handleRegisterSubmit,
       }}
     >
       {children}

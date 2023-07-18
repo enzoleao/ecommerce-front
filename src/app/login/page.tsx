@@ -1,7 +1,10 @@
 'use client'
+import 'dayjs/locale/pt-br'
 import Image from 'next/image'
 import styles from './styles.module.scss'
+import dayjs, { Dayjs } from 'dayjs'
 import LoginImage from '../../../public/login-image.svg'
+import locale from 'antd/locale/pt_BR'
 import { useState } from 'react'
 import { Button, ConfigProvider, DatePicker, Form, Input } from 'antd'
 import {
@@ -11,18 +14,14 @@ import {
   SolutionOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import 'dayjs/locale/pt-br'
-import locale from 'antd/locale/pt_BR'
-import dayjs, { Dayjs } from 'dayjs'
 import { useAllContexts } from '@/contexts/useContexts'
 import { RegisterUserTypes, UserLogin } from '@/@types/types'
-import { useRouter } from 'next/navigation'
 
 export default function Login() {
-  const { handleLoginSubmit, contextHolder } = useAllContexts()
+  const { handleLoginSubmit, contextHolder, handleRegisterSubmit } =
+    useAllContexts()
   const [isLoginMode, setIsLoginMode] = useState(true)
   const [erros, setErros] = useState([])
-  const { push } = useRouter()
   const handleUserLogin = async (data: UserLogin) => {
     setErros([])
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,14 +29,17 @@ export default function Login() {
     if (response.status === 400) {
       return setErros(response.data.erros)
     }
-    return push('/dashboard')
   }
   const handleChangeMode = () => {
     setErros([])
     setIsLoginMode(!isLoginMode)
   }
-  const handleRegisterSubmit = (data: RegisterUserTypes) => {
-    console.log(data)
+  const handleUserRegister = async (data: RegisterUserTypes) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response: any = await handleRegisterSubmit(data)
+    if (response.status === 400) {
+      return setErros(response.data.erros)
+    }
   }
   const showInputsErros = (name: string) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -134,7 +136,7 @@ export default function Login() {
                 <Form
                   name="normal_login"
                   initialValues={{ remember: true }}
-                  onFinish={handleRegisterSubmit}
+                  onFinish={handleUserRegister}
                   style={{ width: '100%' }}
                 >
                   <Form.Item
@@ -225,7 +227,13 @@ export default function Login() {
                       placeholder="Senha"
                     />
                   </Form.Item>
-                  <Form.Item className={styles.formItem}>
+                  <Form.Item
+                    validateStatus={
+                      showInputsErros('password') ? 'error' : undefined
+                    }
+                    hasFeedback
+                    className={styles.formItem}
+                  >
                     <Input.Password
                       size="large"
                       type="password"
