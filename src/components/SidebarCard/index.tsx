@@ -26,12 +26,14 @@ export function SidebarCard() {
           <p>4999.90</p>
         </main>
         <footer>
-          <span>
+          <div>
             <button>-</button>
             <span>1</span>
             <button>+</button>
-          </span>
-          <DeleteOutlined style={{ color: '#ff0000' }} />
+          </div>
+          <DeleteOutlined
+            style={{ color: '#ff0000', fontSize: '25px', cursor: 'pointer' }}
+          />
         </footer>
       </section>
     </div>

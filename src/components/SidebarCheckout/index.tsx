@@ -25,7 +25,15 @@ export function SidebarCheckout(props: any) {
         footer={
           <div className={styles.buttonContainer}>
             <p>SUB TOTAL</p>
-            <Button className={styles.buttonSidebar} size="large">
+            <Button
+              style={{
+                background: 'none',
+                color: '#AE9D92',
+                borderRadius: '0',
+              }}
+              className={styles.buttonSidebarFinish}
+              size="large"
+            >
               FINALIZAR
             </Button>
             <Button className={styles.buttonSidebar} size="large">
