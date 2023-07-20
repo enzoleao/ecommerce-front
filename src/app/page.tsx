@@ -1,5 +1,19 @@
 'use client'
+import { Header } from '@/components/Header'
+import styles from './styles.module.scss'
+import { SidebarCheckout } from '@/components/SidebarCheckout'
+import { useState } from 'react'
 
 export default function Home() {
-  return <main>ok</main>
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  return (
+    <div className={styles.homeWrapper}>
+      <Header setSidebarOpen={setSidebarOpen} />
+      <div className={styles.homeContainer}>Container</div>
+      <SidebarCheckout
+        setSidebarOpen={setSidebarOpen}
+        sidebarOpen={sidebarOpen}
+      />
+    </div>
+  )
 }

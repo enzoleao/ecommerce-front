@@ -16,6 +16,7 @@ import {
 } from '@ant-design/icons'
 import { useAllContexts } from '@/contexts/useContexts'
 import { RegisterUserTypes, UserLogin } from '@/@types/types'
+import { Header } from '@/components/Header'
 
 export default function Login() {
   const { handleLoginSubmit, contextHolder, handleRegisterSubmit } =
@@ -51,6 +52,7 @@ export default function Login() {
   return (
     <div className={styles.loginWrapper}>
       {contextHolder}
+      <Header />
       <div className={styles.loginContainer}>
         <main
           className={`${

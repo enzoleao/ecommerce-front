@@ -1,0 +1,25 @@
+.buttonContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    .buttonSidebar {
+        background-color: #AE9D92;
+        color: white;
+            &:hover {
+                background-color: #877a71;
+                border: none;
+                color: white;
+                span {
+                    color: white;
+                    border: none;  
+                }
+                &:hover {
+                    color: white;
+                    border: none;
+                }
+            }
+        
+    }
+
+}
