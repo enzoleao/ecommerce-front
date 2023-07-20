@@ -1,12 +1,11 @@
-import React from 'react'
 import { Button, Drawer, Space } from 'antd'
 import styles from './styles.module.scss'
 import { SidebarCard } from '../SidebarCard'
+import { productsService } from '@/services/products'
 export function SidebarCheckout(props: any) {
   const showDrawer = () => {
     props.setSidebarOpen(true)
   }
-
   const onClose = () => {
     props.setSidebarOpen(false)
   }
@@ -25,6 +24,7 @@ export function SidebarCheckout(props: any) {
         open={props.sidebarOpen}
         footer={
           <div className={styles.buttonContainer}>
+            <p>SUB TOTAL</p>
             <Button className={styles.buttonSidebar} size="large">
               FINALIZAR
             </Button>
@@ -34,7 +34,11 @@ export function SidebarCheckout(props: any) {
           </div>
         }
       >
-        <SidebarCard />
+        <div className={styles.sidebarChecekoutContainer}>
+          {productsService.map((i) => {
+            return <SidebarCard key={i.id} />
+          })}
+        </div>
       </Drawer>
     </>
   )

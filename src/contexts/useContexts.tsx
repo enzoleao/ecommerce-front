@@ -1,5 +1,5 @@
 import api from '@/services/api'
-import { RegisterUserTypes, User, UserLogin } from '@/@types/types'
+import { RegisterUserTypes, User, UserLoginType } from '@/@types/types'
 import { message } from 'antd'
 import { NoticeType } from 'antd/es/message/interface'
 import { AxiosResponse } from 'axios'
@@ -16,7 +16,7 @@ interface AlertTypes {
 
 type ContextsType = {
   user: User | null
-  handleLoginSubmit: (data: UserLogin) => Promise<AxiosResponse | unknown>
+  handleLoginSubmit: (data: UserLoginType) => Promise<AxiosResponse | unknown>
   isAuthenticated: boolean
   contextHolder: ReactNode
   alertMessage: (data: AlertTypes) => void
@@ -40,7 +40,9 @@ export function ContextsProvider({ children }: MyContextProviderProps) {
       content: message,
     })
   }
-  const handleLoginSubmit = async (data: UserLogin): Promise<AxiosResponse> => {
+  const handleLoginSubmit = async (
+    data: UserLoginType,
+  ): Promise<AxiosResponse> => {
     try {
       const response = await api.post('/session', {
         email: data.email,

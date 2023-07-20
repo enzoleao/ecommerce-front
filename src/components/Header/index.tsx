@@ -1,5 +1,5 @@
-import { Badge } from 'antd'
 import styles from './styles.module.scss'
+import { Badge } from 'antd'
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 
 export function Header(props: any) {

@@ -6,6 +6,7 @@
     .buttonSidebar {
         background-color: #AE9D92;
         color: white;
+
             &:hover {
                 background-color: #877a71;
                 border: none;
@@ -22,4 +23,10 @@
         
     }
 
+}
+.sidebarChecekoutContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
 }

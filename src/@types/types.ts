@@ -10,7 +10,7 @@ export type User = {
     name: string
   }
 }
-export type UserLogin = {
+export type UserLoginType = {
   email: string
   password: string
 }

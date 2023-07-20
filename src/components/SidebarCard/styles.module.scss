@@ -1,0 +1,35 @@
+.cardContainer {
+    width: 100%;
+    height: 185px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 10px;
+    display: flex;
+    
+    .leftSection {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 150px;
+        .imageCard {
+            width: 100px;
+            height: 105px;
+        }
+    }
+    .rightSection {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 28px;
+        gap: 18px;
+        main {
+            display: flex;
+            justify-content: space-around;
+        }
+        footer {
+            display: flex;
+        }
+    }
+}
