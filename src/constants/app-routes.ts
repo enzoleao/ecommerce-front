@@ -7,5 +7,6 @@ export const AppRoutes = {
   public: {
     login: '/login',
     home: '/',
+    product: '/product/*',
   },
 }

@@ -1,37 +1,38 @@
-import { DeleteOutlined } from '@ant-design/icons'
 import styles from './styles.module.scss'
+import { DeleteOutlined } from '@ant-design/icons'
+import { useAllContexts } from '@/contexts/useContexts'
 
 interface ProductsProps {
+  id: number
   name: string
   price: number
   units: number
+  image: string
 }
 
-export function SidebarCard() {
+export function SidebarCard(props: ProductsProps) {
+  const { handleDeleteProductFromCart } = useAllContexts()
   return (
     <div className={styles.cardContainer}>
       <section className={styles.leftSection}>
-        <img
-          src="https://m.media-amazon.com/images/I/41K0G9FgD4L._AC_SX679_.jpg"
-          alt=""
-          className={styles.imageCard}
-        />
+        <img src={props.image} alt="" className={styles.imageCard} />
       </section>
       <section className={styles.rightSection}>
         <header>
-          <p className="text-center">IPhone 13 - 128 GB</p>
+          <p className="text-center">{props.name}</p>
         </header>
         <main>
           <p>R$</p>
-          <p>4999.90</p>
+          <p>{(props.units * props.price).toFixed(2)}</p>
         </main>
         <footer>
           <div>
             <button>-</button>
-            <span>1</span>
+            <span>{props.units}</span>
             <button>+</button>
           </div>
           <DeleteOutlined
+            onClick={() => handleDeleteProductFromCart(props.id)}
             style={{ color: '#ff0000', fontSize: '25px', cursor: 'pointer' }}
           />
         </footer>

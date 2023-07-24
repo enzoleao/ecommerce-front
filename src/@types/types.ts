@@ -22,3 +22,14 @@ export type RegisterUserTypes = {
   cpf: string
   password: string
 }
+
+export type ProductCartType = {
+  index: number
+  id: number
+  productId: number
+  name: string
+  units: number
+  price: number
+  image: string
+  subtotal: number
+}

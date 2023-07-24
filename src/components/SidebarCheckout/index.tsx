@@ -1,21 +1,16 @@
-import { Button, Drawer, Space } from 'antd'
 import styles from './styles.module.scss'
+import { Button, Drawer } from 'antd'
 import { SidebarCard } from '../SidebarCard'
-import { productsService } from '@/services/products'
+import { useAllContexts } from '@/contexts/useContexts'
 export function SidebarCheckout(props: any) {
-  const showDrawer = () => {
-    props.setSidebarOpen(true)
-  }
+  const { cart, contextHolder } = useAllContexts()
+
   const onClose = () => {
     props.setSidebarOpen(false)
   }
+
   return (
     <>
-      <Space>
-        <Button type="primary" onClick={showDrawer}>
-          Open
-        </Button>
-      </Space>
       <Drawer
         title={<p className="text-center">Checkout</p>}
         placement="right"
@@ -24,29 +19,52 @@ export function SidebarCheckout(props: any) {
         open={props.sidebarOpen}
         footer={
           <div className={styles.buttonContainer}>
-            <p>SUB TOTAL</p>
+            <div className={styles.subtotal}>
+              <p>SUB TOTAL</p>
+              <span>
+                <p>R$</p>
+                <p>
+                  {cart
+                    ?.reduce((subtotal, objeto) => {
+                      return subtotal + objeto?.subtotal
+                    }, 0)
+                    .toFixed(2)}
+                </p>
+              </span>
+            </div>
             <Button
-              style={{
-                background: 'none',
-                color: '#AE9D92',
-                borderRadius: '0',
-              }}
+              onClick={() => console.log(cart)}
               className={styles.buttonSidebarFinish}
               size="large"
             >
               FINALIZAR
             </Button>
-            <Button className={styles.buttonSidebar} size="large">
+            <Button
+              onClick={() => console.log(cart)}
+              className={styles.buttonSidebar}
+              size="large"
+            >
               CONTINUAR COMPRANDO
             </Button>
           </div>
         }
       >
         <div className={styles.sidebarChecekoutContainer}>
-          {productsService.map((i) => {
-            return <SidebarCard key={i.id} />
-          })}
+          {typeof cart !== 'undefined' &&
+            cart.map((i, index) => {
+              return (
+                <SidebarCard
+                  id={i.id}
+                  key={index}
+                  image={i.image}
+                  name={i.name}
+                  price={i.price}
+                  units={i.units}
+                />
+              )
+            })}
         </div>
+        {contextHolder}
       </Drawer>
     </>
   )

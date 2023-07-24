@@ -1,9 +1,20 @@
 import api from '@/services/api'
-import { RegisterUserTypes, User, UserLoginType } from '@/@types/types'
+import {
+  ProductCartType,
+  RegisterUserTypes,
+  User,
+  UserLoginType,
+} from '@/@types/types'
 import { message } from 'antd'
 import { NoticeType } from 'antd/es/message/interface'
 import { AxiosResponse } from 'axios'
-import { ReactNode, createContext, useContext, useState } from 'react'
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { useRouter } from 'next/navigation'
 
 interface MyContextProviderProps {
@@ -23,6 +34,9 @@ type ContextsType = {
   handleRegisterSubmit: (
     data: RegisterUserTypes,
   ) => Promise<AxiosResponse | unknown>
+  handleAddProductOnCart: (data: ProductCartType) => void
+  cart: ProductCartType[] | undefined
+  handleDeleteProductFromCart: (id: number) => void
 }
 
 export const Contexts = createContext({} as ContextsType)
@@ -30,10 +44,20 @@ export const Contexts = createContext({} as ContextsType)
 export function ContextsProvider({ children }: MyContextProviderProps) {
   const [user, setUser] = useState<User | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-
   const [messageApi, contextHolder] = message.useMessage()
-  const { push } = useRouter()
+  const [cart, setCart] = useState<ProductCartType[]>([])
 
+  const { push } = useRouter()
+  useEffect(() => {
+    const getCartFromLocalStorage = () => {
+      const getCartFromLocalStorage = localStorage.getItem('cart')
+      const response = getCartFromLocalStorage
+        ? JSON.parse(getCartFromLocalStorage)
+        : []
+      setCart(response)
+    }
+    getCartFromLocalStorage()
+  }, [])
   const alertMessage = ({ type, message }: AlertTypes) => {
     messageApi.open({
       type,
@@ -90,6 +114,16 @@ export function ContextsProvider({ children }: MyContextProviderProps) {
       return err.response
     }
   }
+  const handleAddProductOnCart = async (data: ProductCartType) => {
+    setCart([...cart, data])
+    localStorage.setItem('cart', JSON.stringify([...cart, data]))
+  }
+  const handleDeleteProductFromCart = async (id: number) => {
+    const cartWithoutItemRemoved = cart.filter((obj) => obj.id !== id)
+    setCart(cartWithoutItemRemoved)
+    localStorage.setItem('cart', JSON.stringify(cartWithoutItemRemoved))
+    alertMessage({ type: 'success', message: 'Item removido com sucesso' })
+  }
   return (
     <Contexts.Provider
       value={{
@@ -99,6 +133,9 @@ export function ContextsProvider({ children }: MyContextProviderProps) {
         contextHolder,
         alertMessage,
         handleRegisterSubmit,
+        handleAddProductOnCart,
+        cart,
+        handleDeleteProductFromCart,
       }}
     >
       {children}
